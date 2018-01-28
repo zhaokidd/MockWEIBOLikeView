@@ -37,8 +37,8 @@ public class WeiboLikeAnimView extends RelativeLayout {
 
     private AnimationHelper animationHelper;
 
-    private boolean mIsLiked;//
-    private boolean misRepeatLikeEnable = false;//是否可以重复点赞
+    private boolean mIsLiked;//点赞的初始状态，是否已经点赞
+    private boolean misRepeatLikeEnable = false;//
 
     public WeiboLikeAnimView(Context context) {
         this(context, null);
@@ -53,6 +53,9 @@ public class WeiboLikeAnimView extends RelativeLayout {
         TypedArray typedArray =
                 context.obtainStyledAttributes(attrs, new int[]{android.R.attr.layout_width}, defStyleAttr, 0);
         mThumbLength = (int) typedArray.getLayoutDimension(0, null);
+        typedArray =
+                context.obtainStyledAttributes(attrs, R.styleable.WeiboLikeAnimView, 0, 0);
+        mIsLiked = typedArray.getBoolean(R.styleable.WeiboLikeAnimView_likeview_isLiked, false);
         mRiverRadius = mThumbLength;
         mLikeViewLength = mThumbLength / 2;
         typedArray.recycle();
@@ -145,6 +148,15 @@ public class WeiboLikeAnimView extends RelativeLayout {
 
         riverView.setVisibility(View.GONE);
 //        ivLikePlus.setVisibility(View.GONE);
+
+        //init state
+        if (mIsLiked) {
+            ivThumb.setImageResource(R.drawable.video_interact_like_highlight);
+            setClickable(false);
+        } else {
+            ivThumb.setImageResource(R.drawable.video_interact_like);
+            setClickable(true);
+        }
     }
 
     @Override
@@ -156,7 +168,7 @@ public class WeiboLikeAnimView extends RelativeLayout {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if (w > h) {
+        if (w < h) {
             setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), ivThumb.getMeasuredHeight() / 8);
             removeView(riverView);
             mLpRiverView.width = w;
