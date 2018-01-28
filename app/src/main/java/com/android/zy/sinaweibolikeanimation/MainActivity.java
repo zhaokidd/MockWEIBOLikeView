@@ -23,6 +23,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         mLikeAnimView = findViewById(R.id.weiboLikeAnimView);
         mCircleRiverView = findViewById(R.id.circleRiverView);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mLikeAnimView.setmIsLiked(true);
+            }
+        });
     }
 
     @Override

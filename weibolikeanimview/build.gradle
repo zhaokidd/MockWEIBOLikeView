@@ -7,7 +7,7 @@ android {
         userOrg = 'zhaokidd521'      //bintray注册的用户名
         groupId = 'com.zy'         //compile引用时的第1部分groupId
         artifactId = 'weibolikeview'     //compile引用时的第2部分项目名
-        publishVersion = '1.0.1'    //compile引用时的第3部分版本号
+        publishVersion = '1.0.2'    //compile引用时的第3部分版本号
         desc = 'Mock Sina WEIBO like-view'
         website = 'https://github.com/zhaokidd/MockWEIBOLikeView'
     }

@@ -3,6 +3,7 @@ package com.android.zy.weibolikeanimview.view;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -249,8 +250,65 @@ public class WeiboLikeAnimView extends RelativeLayout {
         return mIsLiked;
     }
 
-    public void setmIsLiked(boolean mIsLiked) {
+    private void changeThumbResource() {
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
+        valueAnimator.setDuration(1);
+        valueAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (mIsLiked) {
+//                    ivThumb.setImageResource(0);
+                    if (mIsLiked) {
+                        setClickable(true);
+                        ivThumb.setImageResource(R.drawable.video_interact_like_highlight);
+
+                    } else {
+                        ivThumb.setImageResource(R.drawable.video_interact_like);
+                        setClickable(false);
+                    }
+/*                    removeView(ivThumb);
+                    addView(ivThumb,mLpIvThumb);
+                    ivThumb.invalidate();*/
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        valueAnimator.start();
+    }
+
+
+    private void changethumbState() {
+        if (mIsLiked) {
+            ivThumb.setImageResource(0);
+            if (mIsLiked) {
+                setClickable(true);
+                ivThumb.setImageResource(R.drawable.video_interact_like_highlight);
+
+            } else {
+                ivThumb.setImageResource(R.drawable.video_interact_like);
+                setClickable(false);
+            }
+        }
+    }
+
+
+    public void setmIsLiked(final boolean mIsLiked) {
         this.mIsLiked = mIsLiked;
+        changethumbState();
     }
 
 }

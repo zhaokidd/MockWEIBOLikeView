@@ -11,7 +11,7 @@
         android:layout_width="35dp"
         android:layout_height="65dp"
         android:onClick="onClick"
-        app:likeview_isLiked="true"
+        app:likeview_isLiked="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
