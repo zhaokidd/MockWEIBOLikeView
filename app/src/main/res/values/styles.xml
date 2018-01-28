@@ -8,4 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="DefaultLikeViewStyle">
+        <item name="likeview_width">15dp</item>
+        <item name="likeview_height">55dp</item>
+    </style>
 </resources>

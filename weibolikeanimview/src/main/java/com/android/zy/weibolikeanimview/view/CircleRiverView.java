@@ -19,23 +19,23 @@ import com.android.zy.weibolikeanimview.animation.AnimationHelper;
 
 /**
  * Created by zy on 2018/1/22.
- * 点赞动画的水波纹View
+ *
  */
 
 public class CircleRiverView extends View {
     private static final String TAG = "CircleRiverView";
-    private static final float DEFAULT_LASER_INIT = 0.7f;//默认的起始镭射光线长度比例
-    private static final float DEFAULT_RIVER_INIT = 0.2f;//默认的水波纹起始比例
-    private int mCircleCenterX = 0;     //圆形水波纹的圆心x坐标
-    private int mCircleCenterY = 0;     //圆形水波纹的圆心y坐标
-    private float mCircleRadius = 40;   //圆形水波纹的最大半径
-    private Paint mCirclePaint;         //圆形水波纹的画笔
-    private Paint mSecondaryCirclePaint;//二级圆形水波纹的画笔，覆盖在底层的圆形上
-    private Paint mLaserPaint;          //镭射激光画笔，是不是很炫酷
-    private Point[] mEndPoints;         //存储镭射激光的终点
-    private Point[] mStartPoints;       //存储镭射激光的起点，初始时都为[mCircleCenterX,mCircleCenterY]
-    private float mLaserPercent = DEFAULT_LASER_INIT; //镭射激光的长度比例(当前显示/初始)
-    private float mRiverRadiusPercent = DEFAULT_RIVER_INIT;//水波纹半径占圆圈总半径的比例.
+    private static final float DEFAULT_LASER_INIT = 0.7f;//
+    private static final float DEFAULT_RIVER_INIT = 0.2f;//
+    private int mCircleCenterX = 0;     //
+    private int mCircleCenterY = 0;     //
+    private float mCircleRadius = 40;   //
+    private Paint mCirclePaint;         //
+    private Paint mSecondaryCirclePaint;//
+    private Paint mLaserPaint;          //
+    private Point[] mEndPoints;         //
+    private Point[] mStartPoints;       //
+    private float mLaserPercent = DEFAULT_LASER_INIT; //
+    private float mRiverRadiusPercent = DEFAULT_RIVER_INIT;//
 
     private AnimationHelper mAnimationHelper;       //animation-helper
 
@@ -230,7 +230,7 @@ public class CircleRiverView extends View {
     }
 
     /**
-     * 计算镭射光线的终点
+     *
      */
     private void calculateLaserPoints() {
         Point point1 = mEndPoints[1];

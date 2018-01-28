@@ -4,9 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,12 +20,6 @@ import com.android.zy.weibolikeanimview.animation.AnimationHelper;
 
 /**
  * Created by zy on 2018/1/22.
- * 仿新浪微博点赞动画
- * 动画共分为四部分:
- * 1.按钮的放缩动画:放大1.5倍后缩小至原来的比例(Reverse效果)(TimeReverseIntepolator)
- * 2.以大拇指为中心向四周散射的五道圆角直线，相互间隔一定角度
- * 3.同样以大拇指为中心向四周散射圆形水波纹
- * 4.从大拇指上方向上弹射的“+1”图片字样，有放缩，透明度变换和平移效果
  */
 public class WeiboLikeAnimView extends RelativeLayout {
     private final static int LENGHT_RIVER_RADIUS_DEFAULT = 0; //default river radius
@@ -41,7 +37,8 @@ public class WeiboLikeAnimView extends RelativeLayout {
 
     private AnimationHelper animationHelper;
 
-    private boolean mIsLiked;//是否已经点赞
+    private boolean mIsLiked;//
+    private boolean misRepeatLikeEnable = false;//是否可以重复点赞
 
     public WeiboLikeAnimView(Context context) {
         this(context, null);
@@ -53,6 +50,12 @@ public class WeiboLikeAnimView extends RelativeLayout {
 
     public WeiboLikeAnimView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        TypedArray typedArray =
+                context.obtainStyledAttributes(attrs, new int[]{android.R.attr.layout_width}, defStyleAttr, 0);
+        mThumbLength = (int) typedArray.getLayoutDimension(0, null);
+        mRiverRadius = mThumbLength;
+        mLikeViewLength = mThumbLength / 2;
+        typedArray.recycle();
         init();
     }
 
@@ -87,7 +90,9 @@ public class WeiboLikeAnimView extends RelativeLayout {
         @Override
         public void onAnimationEnd(Animator animation) {
             ivLikePlus.setVisibility(GONE);
-            setClickable(true);
+            if (misRepeatLikeEnable) {
+                setClickable(true);
+            }
             setmIsLiked(true);
             ivThumb.setImageResource(R.drawable.video_interact_like_highlight);
         }
@@ -104,21 +109,24 @@ public class WeiboLikeAnimView extends RelativeLayout {
     };
 
     private void init() {
-        setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
+
+
+        setBackgroundColor(getResources().getColor(android.R.color.white));
         animationHelper = new AnimationHelper();
 
         //add circle-river-view
         riverView = new CircleRiverView(getContext());
-        mLpRiverView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        mLpRiverView = new RelativeLayout.LayoutParams(mRiverRadius, mRiverRadius);
         mLpRiverView.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         mLpRiverView.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        mLpRiverView.bottomMargin = mRiverRadius / 2;
         addView(riverView, mLpRiverView);
 
         //init thumb view
         ivThumb = new ImageView(getContext());
         ivThumb.setScaleType(ImageView.ScaleType.FIT_XY);
         ivThumb.setImageResource(R.drawable.video_interact_like);
-        mLpIvThumb = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        mLpIvThumb = new RelativeLayout.LayoutParams(mThumbLength, mThumbLength);
         mLpIvThumb.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         mLpIvThumb.addRule(RelativeLayout.CENTER_HORIZONTAL);
         mLpIvThumb.bottomMargin = 0;
@@ -126,11 +134,13 @@ public class WeiboLikeAnimView extends RelativeLayout {
 
         //init the plus-one view
         ivLikePlus = new ImageView(getContext());
+        ivLikePlus.setVisibility(INVISIBLE);
         ivLikePlus.setScaleType(ImageView.ScaleType.FIT_CENTER);
         ivLikePlus.setImageResource(R.drawable.like_anim_plus_one);
-        mLpLikeView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        mLpLikeView = new RelativeLayout.LayoutParams(mLikeViewLength, mLikeViewLength);
         mLpLikeView.addRule(RelativeLayout.CENTER_HORIZONTAL);
         mLpLikeView.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        mLpLikeView.bottomMargin = mLikeViewLength * 2;
         addView(ivLikePlus, mLpLikeView);
 
         riverView.setVisibility(View.GONE);
@@ -146,7 +156,7 @@ public class WeiboLikeAnimView extends RelativeLayout {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if (w < h) {
+        if (w > h) {
             setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), ivThumb.getMeasuredHeight() / 8);
             removeView(riverView);
             mLpRiverView.width = w;
@@ -180,13 +190,13 @@ public class WeiboLikeAnimView extends RelativeLayout {
         final AnimatorSet likePlusViewAnimatorSet = new AnimatorSet();
         //generate plus-view animation
         ObjectAnimator plusViewTranslateAnim =
-                animationHelper.generateTranslateAnimation(ivLikePlus, 1200, 0, ivLikePlus.getBottom() - getBottom());
+                animationHelper.generateTranslateAnimation(ivLikePlus, 1200, 0, -ivLikePlus.getTop());
         ObjectAnimator plusViewScaleXAnim =
                 animationHelper.generateScaleAnimation(ivLikePlus, 500, 1.0f, 1.5f, 1.0f, true);
         ObjectAnimator plusViewScaleYAnim =
                 animationHelper.generateScaleAnimation(ivLikePlus, 500, 1.0f, 1.5f, 1.0f, false);
         ObjectAnimator plusViewAlphaAnim =
-                animationHelper.generateAlphaAnimation(ivLikePlus, 1200, 0.5f, 1.0f, 0.0f);
+                animationHelper.generateAlphaAnimation(ivLikePlus, 600, 0.5f, 1.0f, 0.0f);
         plusViewAlphaAnim.addListener(mPlusViewAnimListener);
 
         thumbAnimatorSet.start();
@@ -217,6 +227,10 @@ public class WeiboLikeAnimView extends RelativeLayout {
     public void reset() {
         mIsLiked = false;
         ivThumb.setImageResource(R.drawable.video_interact_like);
+    }
+
+    public void setIsRepeatLikeEnable(boolean enable) {
+        misRepeatLikeEnable = enable;
     }
 
     public boolean ismIsLiked() {

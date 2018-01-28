@@ -1,9 +1,16 @@
 apply plugin: 'com.android.library'
-
+apply plugin: 'com.novoda.bintray-release'
 android {
     compileSdkVersion 26
 
-
+    publish {
+        userOrg = 'zhaokidd521'      //bintray注册的用户名
+        groupId = 'com.zy'         //compile引用时的第1部分groupId
+        artifactId = 'weibolikeview'     //compile引用时的第2部分项目名
+        publishVersion = '1.0.0'    //compile引用时的第3部分版本号
+        desc = 'Mock Sina WEIBO like-view'
+        website = 'https://github.com/zhaokidd/MockWEIBOLikeView'
+    }
 
     defaultConfig {
         minSdkVersion 17
@@ -22,6 +29,13 @@ android {
         }
     }
 
+    task javadoc(type: Javadoc, overwrite: true) {
+        options.encoding = "UTF-8"
+    }
+
+    compileOptions {
+        encoding "UTF-8"
+    }
 }
 
 dependencies {

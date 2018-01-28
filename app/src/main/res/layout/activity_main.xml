@@ -8,8 +8,8 @@
 
     <com.android.zy.weibolikeanimview.view.WeiboLikeAnimView
         android:id="@+id/weiboLikeAnimView"
-        android:layout_width="15dp"
-        android:layout_height="45dp"
+        android:layout_width="35dp"
+        android:layout_height="65dp"
         android:onClick="onClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

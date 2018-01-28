@@ -21,7 +21,7 @@ import com.android.zy.weibolikeanimview.view.CircleRiverView;
 
 public class AnimationHelper {
     /**
-     * perform the scale&rotate animation
+     * perform the scale and rotate animation
      */
     public AnimatorSet generateThumbAnimation(@NonNull View thumbView,
                                               long scaleDuration,
