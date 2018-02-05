@@ -1,16 +1,13 @@
 package com.android.zy.sinaweibolikeanimation;
 
 import android.animation.Animator;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
 import com.android.zy.weibolikeanimview.view.CircleRiverView;
 import com.android.zy.weibolikeanimview.view.WeiboLikeAnimView;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private WeiboLikeAnimView mLikeAnimView;
@@ -23,12 +20,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         mLikeAnimView = findViewById(R.id.weiboLikeAnimView);
         mCircleRiverView = findViewById(R.id.circleRiverView);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mLikeAnimView.setmIsLiked(true);
-            }
-        });
+        mLikeAnimView.setmIsLiked(true);
     }
 
     @Override

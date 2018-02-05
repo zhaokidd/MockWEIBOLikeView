@@ -6,12 +6,9 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -23,11 +20,11 @@ import com.android.zy.weibolikeanimview.animation.AnimationHelper;
  * Created by zy on 2018/1/22.
  */
 public class WeiboLikeAnimView extends RelativeLayout {
-    private final static int LENGHT_RIVER_RADIUS_DEFAULT = 0; //default river radius
-    private final static int LENGTH_THUMB_DEFAULT = 50;        //default thumb length
-    private int mThumbLength = LENGTH_THUMB_DEFAULT;
     private int mRiverRadius = LENGHT_RIVER_RADIUS_DEFAULT;
+    private final static int LENGHT_RIVER_RADIUS_DEFAULT = 0; //default river radius
     private int mLikeViewLength = LENGTH_THUMB_DEFAULT;
+    private int mThumbLength = LENGTH_THUMB_DEFAULT;
+    private final static int LENGTH_THUMB_DEFAULT = 50;        //default thumb length
 
     private ImageView ivThumb;
     private ImageView ivLikePlus;
@@ -113,8 +110,7 @@ public class WeiboLikeAnimView extends RelativeLayout {
     };
 
     private void init() {
-
-
+//        setViewSurroundingOffset();
         setBackgroundColor(getResources().getColor(android.R.color.white));
         animationHelper = new AnimationHelper();
 
@@ -127,9 +123,12 @@ public class WeiboLikeAnimView extends RelativeLayout {
         addView(riverView, mLpRiverView);
 
         //init thumb view
+        int ivThumbPadding = (int) (Math.sin(Math.toRadians(10))*mThumbLength);
         ivThumb = new ImageView(getContext());
+        ivThumb.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         ivThumb.setScaleType(ImageView.ScaleType.FIT_XY);
         ivThumb.setImageResource(R.drawable.video_interact_like);
+        ivThumb.setPadding(ivThumbPadding,ivThumbPadding,ivThumbPadding,ivThumbPadding);
         mLpIvThumb = new RelativeLayout.LayoutParams(mThumbLength, mThumbLength);
         mLpIvThumb.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         mLpIvThumb.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -171,6 +170,7 @@ public class WeiboLikeAnimView extends RelativeLayout {
         super.onSizeChanged(w, h, oldw, oldh);
         if (w < h) {
             setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), ivThumb.getMeasuredHeight() / 8);
+//            setViewSurroundingOffset();
             removeView(riverView);
             mLpRiverView.width = w;
             mLpRiverView.height = w;
@@ -191,8 +191,15 @@ public class WeiboLikeAnimView extends RelativeLayout {
             mLpLikeView.height = mLikeViewLength;
             mLpLikeView.bottomMargin = w;
             addView(ivLikePlus, mLpLikeView);
+
+
             invalidate();
         }
+    }
+
+    private void setViewSurroundingOffset() {
+        int padding = (int) (Math.sin(Math.toRadians(15)) * mThumbLength);
+        setPadding(padding, padding, padding, padding);
     }
 
 
@@ -292,17 +299,22 @@ public class WeiboLikeAnimView extends RelativeLayout {
 
 
     private void changethumbState() {
-        if (mIsLiked) {
-            ivThumb.setImageResource(0);
-            if (mIsLiked) {
-                setClickable(true);
-                ivThumb.setImageResource(R.drawable.video_interact_like_highlight);
+        ivThumb.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mIsLiked) {
+                    ivThumb.setImageResource(0);
+                    if (mIsLiked) {
+                        setClickable(true);
+                        ivThumb.setImageResource(R.drawable.video_interact_like_highlight);
 
-            } else {
-                ivThumb.setImageResource(R.drawable.video_interact_like);
-                setClickable(false);
+                    } else {
+                        ivThumb.setImageResource(R.drawable.video_interact_like);
+                        setClickable(false);
+                    }
+                }
             }
-        }
+        });
     }
 
 
