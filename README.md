@@ -32,7 +32,7 @@ compile 'com.zy:weibolikeview+'
 ```
 
 #### 代码中使用
-只需要调用 ___startAnim()___方法即可.
+只需要调用__startAnim()__方法即可.
 
 ```java
     private WeiboLikeAnimView mLikeAnimView;
