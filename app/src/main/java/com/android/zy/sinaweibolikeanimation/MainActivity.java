@@ -12,6 +12,7 @@ import com.android.zy.weibolikeanimview.view.WeiboLikeAnimView;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private WeiboLikeAnimView mLikeAnimView;
     private CircleRiverView mCircleRiverView;
+    private Button btnReset;
     private Button mTestButton;
 
     @Override
@@ -20,12 +21,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         mLikeAnimView = findViewById(R.id.weiboLikeAnimView);
         mCircleRiverView = findViewById(R.id.circleRiverView);
+        btnReset = findViewById(R.id.btn_reset);
         mLikeAnimView.setmIsLiked(true);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btn_reset:
+                mLikeAnimView.reset();
+                break;
             case R.id.button:
                 if (mLikeAnimView != null) {
                     mLikeAnimView.startAnim();

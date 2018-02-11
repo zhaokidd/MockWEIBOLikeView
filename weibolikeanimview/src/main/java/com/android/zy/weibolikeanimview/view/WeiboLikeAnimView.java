@@ -123,12 +123,12 @@ public class WeiboLikeAnimView extends RelativeLayout {
         addView(riverView, mLpRiverView);
 
         //init thumb view
-        int ivThumbPadding = (int) (Math.sin(Math.toRadians(10))*mThumbLength);
+        int ivThumbPadding = (int) (Math.sin(Math.toRadians(10)) * mThumbLength);
         ivThumb = new ImageView(getContext());
         ivThumb.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         ivThumb.setScaleType(ImageView.ScaleType.FIT_XY);
         ivThumb.setImageResource(R.drawable.video_interact_like);
-        ivThumb.setPadding(ivThumbPadding,ivThumbPadding,ivThumbPadding,ivThumbPadding);
+        ivThumb.setPadding(ivThumbPadding, ivThumbPadding, ivThumbPadding, ivThumbPadding);
         mLpIvThumb = new RelativeLayout.LayoutParams(mThumbLength, mThumbLength);
         mLpIvThumb.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         mLpIvThumb.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -246,6 +246,7 @@ public class WeiboLikeAnimView extends RelativeLayout {
 
     public void reset() {
         mIsLiked = false;
+        setClickable(true);
         ivThumb.setImageResource(R.drawable.video_interact_like);
     }
 
